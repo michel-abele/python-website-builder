@@ -1,0 +1,11 @@
+{
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 0,
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.iconTheme": "vscode-icons",
+    "editor.fontSize": 17,
+    "editor.wordWrap": "on",
+    "cSpell.language": "en-US,de-DE"
+}

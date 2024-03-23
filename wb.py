@@ -15,7 +15,6 @@
 import sys
 import os
 import tqdm
-import time
 import importlib.util
 
 modules_path = "./wb_modules"
@@ -33,13 +32,15 @@ def import_module(module_name, module_path):
         else:
             exit(f"Error: The module '{module_name}' does not exist")
 
-        time.sleep(0.01)
-
 if len(sys.argv) > 1:
 
     if "init" in sys.argv or "i" in sys.argv:
         init_module = os.path.join(modules_path, "init.py")
         import_module("init", init_module)
+
+    if "build" in sys.argv or "b" in sys.argv:
+        build_module = os.path.join(modules_path, "build.py")
+        import_module("build", build_module)
 
 else:
     exit("You have not entered an argument")

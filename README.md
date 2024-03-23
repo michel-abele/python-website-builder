@@ -14,3 +14,5 @@ A CLI website builder in Python.
         - führe folgenden Befehl `source ~/.bashrc` oder `source ~/.profile` aus
 - nun müssen folgende Python-Module installiert werden
     - tqdm `pip install tqdm`
+    - scss-compiler `pip install libsass`
+    

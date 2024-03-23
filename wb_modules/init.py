@@ -1,25 +1,7 @@
-import os
-import platform
-
-def delete_file(file_path):
-    if os.path.exists(file_path):
-        os.remove(file_path)
-
-def delete_directory(directory_path):
-    if os.path.exists(directory_path):
-        if platform.system() == "Windows":
-            os.system(f'rmdir /s /q "{directory_path}"')
-        else:
-            os.system(f'rm -r "{directory_path}"')
-
-def create_file(file_path):
-    if not os.path.exists(file_path):
-        with open(file_path, "w") as file:
-            file.write("This is an example file.")
-
-def create_directory(directory_path):
-    if not os.path.exists(directory_path):
-        os.makedirs(directory_path)
+from wb_functions import delete_directory
+from wb_functions import delete_file
+from wb_functions import create_directory
+from wb_functions import create_file
 
 directoriesToDelete = [
     "./.git",
@@ -32,6 +14,8 @@ directoriesToCreate = [
     "./source/scss",
     "./source/js",
     "./source/html",
+    "./source/html/content",
+    "./source/html/parts",
     "./source/fonts",
     "./source/img",
     "./source/misc"
@@ -44,11 +28,12 @@ filesToDelete = [
 ]
 
 filesToCreate = [
+    "./source/config.json",
     "./source/scss/framework.scss",
     "./source/scss/main.scss",
     "./source/js/framework.js",
     "./source/js/main.js",
-    "./source/html/index.html",
+    "./source/html/content/index.html",
     "./source/misc/.htaccess",
     "./source/misc/robots.txt",
     "./source/misc/sitemap.xml"

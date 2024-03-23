@@ -17,14 +17,12 @@ def process_scss_files(source_dir, target_dir, temp_dir):
         if not scss_content.strip():
             continue
 
-        # Find import statements in SCSS file
         import_statements = []
         lines = scss_content.split('\n')
         for line in lines:
             if line.startswith('@import'):
                 import_statements.append(line)
 
-        # Process imported SCSS files
         for import_statement in import_statements:
             imported_file = import_statement.split('"')[1]
             if not imported_file.startswith('_'):
@@ -43,8 +41,6 @@ def process_scss_files(source_dir, target_dir, temp_dir):
         css_file = os.path.splitext(scss_file)[0] + '.css'
         css_path = os.path.join(target_dir, css_file)
 
-        #scss_content = scss_content.replace('\n', ' ')
-        #scss_content = scss_content.replace('  ', '')
         compiled_css = sass.compile(string=scss_content)
 
         with open(css_path, 'w') as file:

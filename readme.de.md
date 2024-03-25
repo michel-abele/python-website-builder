@@ -1,6 +1,8 @@
 [<< zurück](https://github.com/michel-abele/python-website-builder)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/michel-abele/python-website-builder?style=for-the-badge)
+![GitHub Release](https://img.shields.io/github/v/release/michel-abele/python-website-builder)
+![GitHub last commit](https://img.shields.io/github/last-commit/michel-abele/python-website-builder)
+![GitHub repo size](https://img.shields.io/github/repo-size/michel-abele/python-website-builder)
 
 # Python-Website-Builder
 Ein CLI-Website-Builder in Python.

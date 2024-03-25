@@ -3,50 +3,78 @@ from wb_functions import delete_file
 from wb_functions import create_directory
 from wb_functions import create_file
 
-directoriesToDelete = [
+
+# ==============================================================================
+# directories
+
+# main directories
+directory_source = "./source"
+directory_page   = "./page"
+
+# directories to delete
+directories_to_delete = [
     "./.git",
     "./.vscode"
 ]
 
-directoriesToCreate = [
-    "./page",
-    "./source",
-    "./source/scss",
-    "./source/js",
-    "./source/html",
-    "./source/html/content",
-    "./source/html/parts",
-    "./source/fonts",
-    "./source/img",
-    "./source/misc"
+# directories to create
+directories_to_create = [
+    directory_page,
+
+    directory_source,
+    directory_source + "/scss",
+    directory_source + "/js",
+    directory_source + "/html",
+    directory_source + "/fonts",
+    directory_source + "/img",
+    directory_source + "/misc",
+
+    directory_source + "/html/content",
+    directory_source + "/html/parts"
 ]
 
-filesToDelete = [
+
+# ==============================================================================
+# files
+
+# files to delete
+files_to_delete = [
     "./.gitignore",
     "./LICENSE",
     "./README.md"
 ]
 
-filesToCreate = [
-    "./source/config.json",
-    "./source/scss/framework.scss",
-    "./source/scss/main.scss",
-    "./source/js/framework.js",
-    "./source/js/main.js",
-    "./source/html/content/index.html",
-    "./source/misc/.htaccess",
-    "./source/misc/robots.txt",
-    "./source/misc/sitemap.xml"
+# files to create
+files_to_create = [
+    directory_source + "/scss/framework.scss",
+    directory_source + "/scss/main.scss",
+    
+    directory_source + "/js/framework.js",
+    directory_source + "/js/main.js",
+    
+    directory_source + "/html/content/index.html",
+    
+    directory_source + "/misc/.htaccess",
+    directory_source + "/misc/robots.txt",
+    directory_source + "/misc/sitemap.xml"
 ]
 
-for directory in directoriesToDelete:
-    delete_directory(directory)
 
-for file in filesToDelete:
+# ==============================================================================
+# start initiation
+
+# delete files
+for file in files_to_delete:
     delete_file(file)
 
-for directory in directoriesToCreate:
+# delete directories
+for directory in directories_to_delete:
+    delete_directory(directory)
+
+# create directories
+for directory in directories_to_create:
     create_directory(directory)
 
-for file in filesToCreate:
+# create files
+for file in files_to_create:
     create_file(file)

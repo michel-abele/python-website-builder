@@ -7,3 +7,9 @@ def compare_and_delete(source, target, exclude_dir=None):
             os.remove(target_item)
         elif os.path.isdir(target_item) and item != exclude_dir:
             compare_and_delete(os.path.join(source, item), target_item, exclude_dir)
+
+    for root, dirs, files in os.walk(target, topdown=False):
+        for dir in dirs:
+            dir_path = os.path.join(root, dir)
+            if not os.listdir(dir_path):
+                os.rmdir(dir_path)

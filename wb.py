@@ -20,7 +20,7 @@ import importlib.util
 modules_path = "./wb_modules"
 
 def import_module(module_name, module_path):
-    for i in tqdm.tqdm(range(100), desc="Initializing", ascii=False, ncols=75):
+    for i in tqdm.tqdm(range(100), desc="Processing", ascii=False, ncols=75):
 
         if os.path.exists(module_path):
             try:

@@ -1,6 +1,7 @@
 import os
 import shutil
 import sass
+import sys
 
 def process_scss_files(source_dir, target_dir, temp_dir):
     os.makedirs(target_dir, exist_ok=True)
@@ -42,6 +43,10 @@ def process_scss_files(source_dir, target_dir, temp_dir):
         css_path = os.path.join(target_dir, css_file)
 
         compiled_css = sass.compile(string=scss_content)
+
+        # minify content
+        if "-mini" in sys.argv or "-m" in sys.argv:
+            compiled_css = compiled_css.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('  ', ' ')
 
         with open(css_path, 'w') as file:
             file.seek(0)

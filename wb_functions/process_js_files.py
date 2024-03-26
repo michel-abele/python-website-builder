@@ -30,6 +30,10 @@ def process_js_files(source_dir, target_dir, temp_dir):
                     else:
                         modified_content.append(line)
                 
+                if "-mini" in sys.argv or "-m" in sys.argv:
+                    modified_content = "".join(modified_content)
+                    modified_content = modified_content.replace("\n", "").replace("\r", "").replace("\t", "").replace("  ", "")
+
                 with open(temp_path, "w") as file:
                     file.write("\n".join(modified_content))
 

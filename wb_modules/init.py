@@ -41,7 +41,8 @@ directories_to_create = [
 files_to_delete = [
     "./.gitignore",
     "./LICENSE",
-    "./README.md"
+    "./README.md",
+    "./readme.de.md"
 ]
 
 # files to create

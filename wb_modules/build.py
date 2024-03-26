@@ -93,17 +93,17 @@ process_html_files(directory_source_html, directory_page, config_file, html_part
 # ==============================================================================
 # process scss files
 
-#process_scss_files(directory_source_scss, directory_page_lib_css, directory_temp)
+process_scss_files(directory_source_scss, directory_page_lib_css, directory_temp)
 
 
 # ==============================================================================
 # process javascript files
 
-#process_js_files(directory_source_js, directory_page_lib_js, directory_temp)
+process_js_files(directory_source_js, directory_page_lib_js, directory_temp)
 
 
 # ==============================================================================
 # finalize directories and files
 
 # delete temp directory
-delete_directory(directory_temp)
+# delete_directory(directory_temp)

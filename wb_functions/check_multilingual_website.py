@@ -5,7 +5,7 @@ def check_multilingual_website(source_path):
     
     # ==============================================================================================
     # check for multilingual website
-    subdirectories = os.listdir(source_path)
+    subdirectories = [subdir for subdir in os.listdir(source_path) if subdir not in ['index.html', '.', '..']]
     for subdir in subdirectories:
         if len(subdir) == 2 and subdir.isalpha():
             continue
@@ -30,10 +30,10 @@ def check_multilingual_website(source_path):
                 json_file = os.path.join(sitemap_dir, f"{subdir}.json")
                 with open(json_file, "w") as f:
                     f.write("{}")
-    else:
-        json_file = os.path.join("./temp", f"sitemap.json")
-        with open(json_file, "w") as f:
-            f.write("{}")
+    
+    json_file = os.path.join("./temp", f"sitemap.json")
+    with open(json_file, "w") as file:
+            file.write("{}")
 
     # ==============================================================================================
     return is_multilingual_website

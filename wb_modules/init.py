@@ -28,6 +28,7 @@ directories_to_create = [
     directory_source + "/fonts",
     directory_source + "/img",
     directory_source + "/misc",
+    directory_source + "/sitemap",
 
     directory_source + "/html/content",
     directory_source + "/html/parts"
@@ -56,8 +57,7 @@ files_to_create = [
     directory_source + "/html/content/index.html",
     
     directory_source + "/misc/.htaccess",
-    directory_source + "/misc/robots.txt",
-    directory_source + "/misc/sitemap.xml"
+    directory_source + "/misc/robots.txt"
 ]
 
 

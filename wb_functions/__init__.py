@@ -3,6 +3,7 @@ from .compare_and_delete import compare_and_delete
 from .copy_misc_files import copy_misc_files
 from .create_directory import create_directory
 from .create_file import create_file
+from .create_sitemap import create_sitemap
 from .delete_directory import delete_directory
 from .delete_file import delete_file
 from .html_parts_file_modification_file import html_parts_file_modification_file

@@ -1,6 +1,8 @@
 from wb_functions import check_multilingual_website
 from wb_functions import compare_and_delete
+from wb_functions import copy_misc_files
 from wb_functions import create_directory
+from wb_functions import create_sitemap
 from wb_functions import delete_directory
 from wb_functions import html_parts_file_modification_file
 from wb_functions import process_html_files
@@ -84,26 +86,26 @@ else:
 
 # ==============================================================================
 # process html files
-
 html_parts_file_modification_file(directory_source_html_parts, html_parts_modification_file)
 is_multilingual_website = check_multilingual_website(directory_source_html_content)
 process_html_files(directory_source_html, directory_page, config_file, html_parts_modification_file, is_multilingual_website)
-
+create_sitemap(is_multilingual_website, config_file, directory_page)
 
 # ==============================================================================
 # process scss files
-
 process_scss_files(directory_source_scss, directory_page_lib_css, directory_temp)
 
 
 # ==============================================================================
 # process javascript files
-
 process_js_files(directory_source_js, directory_page_lib_js, directory_temp)
 
 
 # ==============================================================================
 # finalize directories and files
 
+# copy misc files
+copy_misc_files(directory_source_misc, directory_page)
+
 # delete temp directory
-# delete_directory(directory_temp)
+delete_directory(directory_temp)

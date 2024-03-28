@@ -5,9 +5,10 @@ import sys
 
 def process_scss_files(source_dir, target_dir, temp_dir):
     os.makedirs(target_dir, exist_ok=True)
-
     scss_files = [f for f in os.listdir(source_dir) if f.endswith('.scss') and not f.startswith('_')]
 
+    # ==============================================================================================
+    # process scss files
     for scss_file in scss_files:
         temp_file = os.path.join(temp_dir, scss_file)
         shutil.copyfile(os.path.join(source_dir, scss_file), temp_file)
@@ -48,9 +49,8 @@ def process_scss_files(source_dir, target_dir, temp_dir):
         if "-mini" in sys.argv or "-m" in sys.argv:
             compiled_css = compiled_css.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('  ', ' ')
 
+        # write compiled css to target file
         with open(css_path, 'w') as file:
             file.seek(0)
             file.write(compiled_css)
             file.truncate()
-
-        os.remove(temp_file)

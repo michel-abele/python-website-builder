@@ -14,6 +14,7 @@ directory_page   = "./page"
 # directories to delete
 directories_to_delete = [
     "./.git",
+    "./temp",
     "./.vscode"
 ]
 

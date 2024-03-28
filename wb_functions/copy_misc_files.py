@@ -3,6 +3,9 @@ import shutil
 
 def copy_misc_files(source_dir, target_dir):
 
+    # ==============================================================================================
+    # copy miscellaneous files
+    
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
 

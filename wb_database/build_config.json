@@ -1,0 +1,20 @@
+{
+    "directories": {
+      "temp": "./temp",
+      "source": "./source",
+      "page": "./page",
+      "source_html": "./source/html",
+      "source_html_content": "./source/html/content",
+      "source_html_parts": "./source/html/parts",
+      "source_scss": "./source/scss",
+      "source_js": "./source/js",
+      "source_fonts": "./source/fonts",
+      "source_img": "./source/img",
+      "source_misc": "./source/misc",
+      "page_lib": "./page/lib",
+      "page_lib_css": "./page/lib/css",
+      "page_lib_js": "./page/lib/js",
+      "page_lib_fonts": "./page/lib/fonts",
+      "page_lib_img": "./page/lib/img"
+    }
+  }

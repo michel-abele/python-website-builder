@@ -16,12 +16,11 @@ class Multilingual_Website_Checker:
         # check for multilingual website
         self.subdirectories = [subdir for subdir in os.listdir(self.source_path) if os.path.isdir(os.path.join(self.source_path, subdir))]
         for subdir in self.subdirectories:
-            if not self.is_valid_language_code(subdir):
+            if not self._is_valid_language_code(subdir):
                 self.is_multilingual_website = False
                 break
 
-        if self.is_multilingual_website:
-            self.create_sitemap_files()
+        self._create_sitemap_files()
 
         return self.is_multilingual_website
 
@@ -30,12 +29,12 @@ class Multilingual_Website_Checker:
     # helper methods
 
     # check valid language code
-    def is_valid_language_code(self, code):
+    def _is_valid_language_code(self, code):
         pattern = r'^[a-z]{2}(-[a-zA-Z]{2,3})?$'
         return bool(re.match(pattern, code))
 
     # create sitemap files
-    def create_sitemap_files(self):
+    def _create_sitemap_files(self):
         sitemap_dir = os.path.join("temp", "sitemap")
         os.makedirs(sitemap_dir, exist_ok=True)
 

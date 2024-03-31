@@ -1,121 +1,111 @@
-from wb_functions import copy_misc_files
-from wb_functions import create_directory
-from wb_functions import create_sitemap
-from wb_functions import delete_directory
-from wb_functions import process_scss_files
-from wb_functions import process_js_files
-
+from wb_classes import Build_Config_Loader
 from wb_classes import File_Comparator
+from wb_classes import File_Copier
+from wb_classes import File_System_Manager as FSM
 from wb_classes import HTML_Parts_Modification_Tracker
 from wb_classes import HTML_Processor
+from wb_classes import JS_Processor
 from wb_classes import Multilingual_Website_Checker
+from wb_classes import SCSS_Processor
+from wb_classes import Sitemap_Generator
 
 import sys
 
+from tqdm import tqdm
 
-# ==============================================================================
-# directories
+# tqdm settings
+tqdm_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
+tqdm_ncols = 75
+tqdm_ascii = False
+tqdm_colour = 'green'
 
-# main directories
-directory_temp   = "./temp"
-directory_source = "./source"
-directory_page   = "./page"
 
-# html source directories
-directory_source_html = directory_source + "/html"
-directory_source_html_content = directory_source_html + "/content"
-directory_source_html_parts   = directory_source_html + "/parts"
+# ==================================================================================================
+# files
 
-# scss source directories
-directory_source_scss = directory_source + "/scss"
+# config files
+build_config = "./wb_database/build_config.json"
+page_config = "./wb_database/page_config.json"
 
-# javascript source directories
-directory_source_js = directory_source + "/js"
+# temp files
+html_parts_modification_file = "./temp/html_parts_file_modifications.json"
 
-# fonts source directories
-directory_source_fonts = directory_source + "/fonts"
-
-# images source directories
-directory_source_img = directory_source + "/img"
-
-# misc source directories
-directory_source_misc = directory_source + "/misc"
-
-# library page directories
-directory_page_lib = directory_page + "/lib"
-directory_page_lib_css   = directory_page_lib + "/css"
-directory_page_lib_js    = directory_page_lib + "/js"
-directory_page_lib_fonts = directory_page_lib + "/fonts"
-directory_page_lib_img   = directory_page_lib + "/img"
+# config loader
+bcl = Build_Config_Loader(build_config)
 
 # library page directories array
 library_page_directories = [
-    directory_page_lib,
-    directory_page_lib_css,
-    directory_page_lib_js,
-    directory_page_lib_fonts,
-    directory_page_lib_img,
+    bcl.get_directory("page_lib"),
+    bcl.get_directory("page_lib_css"),
+    bcl.get_directory("page_lib_js"),
+    bcl.get_directory("page_lib_img"),
+    bcl.get_directory("page_lib_fonts"),
 ]
 
 
-# ==============================================================================
-# files
-
-# general files
-config_file = "./wb_database/config.json"
-html_parts_modification_file = "./temp/html_parts_file_modifications.json"
-
-
-# ==============================================================================
+# ==================================================================================================
 # prepare directories and files
 
 # clean page directory
-if "-clear" in sys.argv or "-c" in sys.argv:
-    delete_directory(directory_page)
-    delete_directory(directory_temp)
-    create_directory(directory_page)
+for i in tqdm(range(100), desc="Cleaning Page Directory", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    if "-clear" in sys.argv or "-c" in sys.argv:
+        FSM.delete_directory(bcl.get_directory("page"))
+        FSM.delete_directory(bcl.get_directory("temp"))
+        FSM.create_directory(bcl.get_directory("page"))
 
-# create or update page directory
-else:
-    comparator = File_Comparator(directory_source_html_content, directory_page, "lib")
-    comparator.compare_and_delete()
+    # create or update page directory
+    else:
+        file_comparator = File_Comparator(bcl.get_directory("source_html_content"), bcl.get_directory("page"), "lib")
+        file_comparator.compare_and_delete()
 
-    for directory in library_page_directories:
-        create_directory(directory)
+        for directory in library_page_directories:
+            FSM.create_directory(directory)
 
+
+# ==================================================================================================
 # create temp directory
-create_directory(directory_temp)
+FSM.create_directory(bcl.get_directory("temp"))
 
 
-# ==============================================================================
+# ==================================================================================================
 # process html files
-tracker = HTML_Parts_Modification_Tracker(directory_source_html_parts, html_parts_modification_file)
-tracker.track_modifications()
+for i in tqdm(range(100), desc="Processing HTML Files  ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    mod_tracker = HTML_Parts_Modification_Tracker(bcl.get_directory("source_html_parts"), html_parts_modification_file)
+    mod_tracker.track_modifications()
 
-mw_checker = Multilingual_Website_Checker(directory_source_html_content)
-is_multilingual_website = mw_checker.check_multilingual_website()
+    mw_checker = Multilingual_Website_Checker(bcl.get_directory("source_html_content"))
+    is_multilingual_website = mw_checker.check_multilingual_website()
 
-processor = HTML_Processor(directory_source_html, directory_page, config_file, html_parts_modification_file, is_multilingual_website)
-processor.process_html_files()
+    html_processor = HTML_Processor(bcl.get_directory("source_html"), bcl.get_directory("page"), page_config, html_parts_modification_file, is_multilingual_website)
+    html_processor.process_html_files()
 
-create_sitemap(is_multilingual_website, config_file, directory_page)
+    sm_generator = Sitemap_Generator(is_multilingual_website, page_config, bcl.get_directory("page"))
+    sm_generator.generate_sitemap()
 
 
-# ==============================================================================
+# ==================================================================================================
 # process scss files
-process_scss_files(directory_source_scss, directory_page_lib_css, directory_temp)
+for i in tqdm(range(100), desc="Processing CSS Files   ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    scss_processor = SCSS_Processor(bcl.get_directory("source_scss"), bcl.get_directory("page_lib_css"), bcl.get_directory("temp"))
+    scss_processor.process_scss_files()
 
 
-# ==============================================================================
+# ==================================================================================================
 # process javascript files
-process_js_files(directory_source_js, directory_page_lib_js, directory_temp)
+for i in tqdm(range(100), desc="Processing JS Files    ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    js_processor = JS_Processor(bcl.get_directory("source_js"), bcl.get_directory("page_lib_js"), bcl.get_directory("temp"))
+    js_processor.process_js_files()
 
 
-# ==============================================================================
+# ==================================================================================================
 # finalize directories and files
 
 # copy misc files
-copy_misc_files(directory_source_misc, directory_page)
+for i in tqdm(range(100), desc="Copying Misc Files     ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    file_copier = File_Copier(bcl.get_directory("source_misc"), bcl.get_directory("page"))
+    file_copier.copy_files()
 
+
+# ==================================================================================================
 # delete temp directory
-#delete_directory(directory_temp)
+FSM.delete_directory(bcl.get_directory("temp"))

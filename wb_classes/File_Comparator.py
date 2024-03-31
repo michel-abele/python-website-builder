@@ -11,15 +11,15 @@ class File_Comparator:
     # ==============================================================================================
     # compare_and_delete
     def compare_and_delete(self):
-        self.compare_and_delete_files()
-        self.delete_empty_directories()
+        self._compare_and_delete_files()
+        self._delete_empty_directories()
 
 
     # ==============================================================================================
     # helper methods
         
     # compare and delete files
-    def compare_and_delete_files(self):
+    def _compare_and_delete_files(self):
         for item in os.listdir(self.target):
             target_item = os.path.join(self.target, item)
             source_item = os.path.join(self.source, item)
@@ -30,14 +30,14 @@ class File_Comparator:
                 self.compare_and_delete_subdirectory(source_item, target_item)
 
     # compare and delete subdirectory
-    def compare_and_delete_subdirectory(self, source_subdir, target_subdir):
+    def _compare_and_delete_subdirectory(self, source_subdir, target_subdir):
         if not os.path.exists(source_subdir):
             shutil.rmtree(target_subdir)
         else:
             File_Comparator(source_subdir, target_subdir, self.exclude_dir).compare_and_delete()
 
     # delete empty directories
-    def delete_empty_directories(self):
+    def _delete_empty_directories(self):
         for root, dirs, files in os.walk(self.target, topdown=False):
             for dir in dirs:
                 dir_path = os.path.join(root, dir)

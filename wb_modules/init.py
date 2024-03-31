@@ -1,82 +1,31 @@
-from wb_functions import delete_directory
-from wb_functions import delete_file
-from wb_functions import create_directory
-from wb_functions import create_file
+from wb_classes import Init_Config_Loader
+from wb_classes import File_System_Manager as FSM
 
+from tqdm import tqdm
 
-# ==============================================================================
-# directories
-
-# main directories
-directory_source = "./source"
-directory_page   = "./page"
-
-# directories to delete
-directories_to_delete = [
-    "./.git",
-    "./temp",
-    "./.vscode"
-]
-
-# directories to create
-directories_to_create = [
-    directory_page,
-
-    directory_source,
-    directory_source + "/scss",
-    directory_source + "/js",
-    directory_source + "/html",
-    directory_source + "/fonts",
-    directory_source + "/img",
-    directory_source + "/misc",
-    directory_source + "/sitemap",
-
-    directory_source + "/html/content",
-    directory_source + "/html/parts"
-]
-
-
-# ==============================================================================
-# files
-
-# files to delete
-files_to_delete = [
-    "./.gitignore",
-    "./LICENSE",
-    "./README.md",
-    "./readme.de.md"
-]
-
-# files to create
-files_to_create = [
-    directory_source + "/scss/framework.scss",
-    directory_source + "/scss/main.scss",
-    
-    directory_source + "/js/framework.js",
-    directory_source + "/js/main.js",
-    
-    directory_source + "/html/content/index.html",
-    
-    directory_source + "/misc/.htaccess",
-    directory_source + "/misc/robots.txt"
-]
-
+# tqdm settings
+tqdm_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
+tqdm_ncols = 75
+tqdm_ascii = False
+tqdm_colour = 'blue'
 
 # ==============================================================================
 # start initiation
+config_file = "./wb_database/init_config.json"
+icl = Init_Config_Loader(config_file)
 
 # delete files
-for file in files_to_delete:
-    delete_file(file)
+for file_to_delete in tqdm(icl.files_to_delete, desc="Delete Files      ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    FSM.delete_file(file_to_delete)
 
 # delete directories
-for directory in directories_to_delete:
-    delete_directory(directory)
+for directory_to_delete in tqdm(icl.directories_to_delete, desc="Delete Directories", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    FSM.delete_directory(directory_to_delete)
 
 # create directories
-for directory in directories_to_create:
-    create_directory(directory)
+for directory_to_create in tqdm(icl.directories_to_create, desc="Create Directories", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    FSM.create_directory(directory_to_create)
 
 # create files
-for file in files_to_create:
-    create_file(file)
+for file_to_create in tqdm(icl.files_to_create, desc="Create Files      ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    FSM.create_file(file_to_create)

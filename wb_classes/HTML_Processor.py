@@ -21,7 +21,7 @@ class HTML_Processor:
 
                 # ==================================================================================
                 # check for up-to-dateness
-                if self.is_up_to_date(source_file_path, target_file_path):
+                if self._is_up_to_date(source_file_path, target_file_path):
                     continue
 
 
@@ -37,24 +37,24 @@ class HTML_Processor:
                     content = f.read()
 
                     # include partials
-                    content = self.include_partials(content)
+                    content = self._include_partials(content)
 
                     # replace static values
-                    content = self.replace_static_values(content)
+                    content = self._replace_static_values(content)
 
                     # target file modification time
                     file_modification_time = os.path.getmtime(target_file_path)
                     content = content.replace("<!-- value_dynamic: file_modification_time -->", str(file_modification_time))
 
                     # generate heading id attributes
-                    content = self.generate_heading_ids(content)
+                    content = self._generate_heading_ids(content)
 
                     # generate table of contents
-                    content = self.generate_table_of_contents(content)
+                    content = self._generate_table_of_contents(content)
 
                     # minify html content
                     if "-mini" in sys.argv or "-m" in sys.argv:
-                        content = self.minify_content(content)
+                        content = self._minify_content(content)
 
                     # write content to target file
                     f.seek(0)
@@ -63,15 +63,15 @@ class HTML_Processor:
 
                 # ==================================================================================
                 # handle sitemap JSON files
-                json_file_path = self.get_json_file_path(target_file_path)
-                self.update_sitemap_data(json_file_path, target_file_path)
+                json_file_path = self._get_json_file_path(target_file_path)
+                self._update_sitemap_data(json_file_path, target_file_path)
 
 
     # ==============================================================================================
     # helper methods
 
     # get JSON file path
-    def get_json_file_path(self, target_file_path):
+    def _get_json_file_path(self, target_file_path):
         if self.is_multilingual_website:
             first_directory = os.path.basename(os.path.dirname(target_file_path.replace(self.target_path, "")))
             if first_directory != "":
@@ -80,10 +80,12 @@ class HTML_Processor:
                 json_file_path = os.path.join("./temp", "sitemap.json")
         else:
             json_file_path = os.path.join("./temp", "sitemap.json")
+        
+        os.makedirs(os.path.dirname(json_file_path), exist_ok=True)
         return json_file_path
 
     # update sitemap data
-    def update_sitemap_data(self, json_file_path, target_file_path):
+    def _update_sitemap_data(self, json_file_path, target_file_path):
         with open(json_file_path, 'r+') as json_file:
             try:
                 sitemap_data = json.load(json_file)
@@ -96,7 +98,7 @@ class HTML_Processor:
                 pass
 
     # check if file is up to date
-    def is_up_to_date(self, source_file_path, target_file_path):
+    def _is_up_to_date(self, source_file_path, target_file_path):
         if os.path.exists(target_file_path):
             source_file_modification_time = os.path.getmtime(source_file_path)
             target_file_modification_time = os.path.getmtime(target_file_path)
@@ -123,7 +125,7 @@ class HTML_Processor:
         return False
 
     # include partials
-    def include_partials(self, content):
+    def _include_partials(self, content):
         matches = re.findall(r"<!-- include: (.*?) -->", content)
         for match in matches:
             file_path = os.path.join(self.source_path, "parts", match.strip() + ".html")
@@ -139,7 +141,7 @@ class HTML_Processor:
         return content
 
     # replace static values
-    def replace_static_values(self, content):
+    def _replace_static_values(self, content):
         with open(self.config_file_path, 'r') as config_file:
             try:
                 config = json.load(config_file)
@@ -151,7 +153,7 @@ class HTML_Processor:
         return content
 
     # generate heading id attributes
-    def generate_heading_ids(self, content):
+    def _generate_heading_ids(self, content):
         main_content = re.search(r'<main>(.*?)</main>', content, re.DOTALL)
         if main_content:
             main_content_text = main_content.group(1)
@@ -167,7 +169,7 @@ class HTML_Processor:
         return content
 
     # generate table of contents
-    def generate_table_of_contents(self, content):
+    def _generate_table_of_contents(self, content):
         if '<!-- toc -->' in content:
             main_content = re.search(r'<main>(.*?)</main>', content, re.DOTALL)
             if main_content:
@@ -198,7 +200,7 @@ class HTML_Processor:
         return content
 
     # minify html content
-    def minify_content(self, content):
+    def _minify_content(self, content):
         content = re.sub(r"<!--.*?-->", "", content, flags=re.DOTALL)
         content = re.sub(r"\s+", " ", content)
         content = re.sub(r"\s*(<.*?>)\s*", r"\1", content)

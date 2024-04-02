@@ -4,6 +4,7 @@ from .File_Copier import File_Copier
 from .File_System_Manager import File_System_Manager
 from .HTML_Parts_Modification_Tracker import HTML_Parts_Modification_Tracker
 from .HTML_Processor import HTML_Processor
+from .Image_Processor import Image_Processor
 from .Init_Config_Loader import Init_Config_Loader
 from .JS_Processor import JS_Processor
 from .Module_Loader import Module_Loader

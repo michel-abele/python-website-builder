@@ -4,6 +4,7 @@ from wb_classes import File_Copier
 from wb_classes import File_System_Manager as FSM
 from wb_classes import HTML_Parts_Modification_Tracker
 from wb_classes import HTML_Processor
+from wb_classes import Image_Processor
 from wb_classes import JS_Processor
 from wb_classes import Multilingual_Website_Checker
 from wb_classes import SCSS_Processor
@@ -95,6 +96,13 @@ for i in tqdm(range(100), desc="Processing CSS Files   ", ascii=tqdm_ascii, ncol
 for i in tqdm(range(100), desc="Processing JS Files    ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
     js_processor = JS_Processor(bcl.get_directory("source_js"), bcl.get_directory("page_lib_js"), bcl.get_directory("temp"))
     js_processor.process_js_files()
+
+
+# ==================================================================================================
+# process images
+for i in tqdm(range(100), desc="Processing Images      ", ascii=tqdm_ascii, ncols=tqdm_ncols, colour=tqdm_colour, bar_format=tqdm_format):
+    img_processor = Image_Processor(bcl.get_directory("source_img"), bcl.get_directory("page_lib_img"))
+    img_processor.process_images()
 
 
 # ==================================================================================================

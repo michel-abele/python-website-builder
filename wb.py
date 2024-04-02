@@ -2,7 +2,7 @@
 #
 #          FILE: wb.py
 #
-#         USAGE: python wb.py argument
+#         USAGE: py wb.py arguments
 #
 #   DESCRIPTION: Python script file for the automatic creation of a static website.
 #
@@ -37,5 +37,5 @@ if len(sys.argv) > 1:
     
     module_loader.load_modules(module_names)
 else:
-    print("You have not entered an argument!")
+    print("Error: You have not entered an argument!")
     exit(1)

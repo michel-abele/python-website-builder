@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import sass
@@ -31,6 +32,8 @@ class SCSS_Processor:
             css_path = os.path.join(self.target_dir, css_file)
             compiled_css = sass.compile(string=scss_content)
 
+            self._extract_image_links(compiled_css)
+
             if "-mini" in sys.argv or "-m" in sys.argv:
                 compiled_css = self._minify_css(compiled_css)
 
@@ -39,7 +42,7 @@ class SCSS_Processor:
 
     # ==============================================================================================
     # helper methods
-                
+
     # process imports
     def _process_imports(self, scss_content):
         import_pattern = re.compile(r'@import\s*"([^"]+)";')
@@ -64,9 +67,34 @@ class SCSS_Processor:
 
         return scss_content
 
+    # extract image links
+    def _extract_image_links(self, content):
+        image_links = []
+
+        css_links = re.findall(r'url\([\'"](.*?)[\'"]', content)
+        css_links = [link.replace("/lib/img/", "") for link in css_links if link.endswith(('.jpg', '.png'))]
+        image_links.extend(css_links)
+
+        image_links = list(set(image_links))
+        image_links_file = "./temp/image_links.json"
+        os.makedirs(os.path.dirname(image_links_file), exist_ok=True)
+
+        try:
+            with open(image_links_file, 'r') as f:
+                existing_links = json.load(f)
+        except FileNotFoundError:
+            existing_links = []
+
+        existing_links.extend(image_links)
+        existing_links = list(set(existing_links))
+
+        with open(image_links_file, 'w') as f:
+            json.dump(existing_links, f)
+
     # minify css
     def _minify_css(self, css_content):
-        minified_css = re.sub(r'\s+', ' ', css_content)
-        minified_css = re.sub(r'/\*.*?\*/', '', minified_css, flags=re.DOTALL)
+        minified_css = re.sub(r'/\*.*?\*/', '', css_content, flags=re.DOTALL)
+        minified_css = re.sub(r'//.*', '', minified_css)
+        minified_css = re.sub(r'\s+', ' ', minified_css)
         minified_css = re.sub(r'\s*([{};:,])\s*', r'\1', minified_css)
         return minified_css.strip()

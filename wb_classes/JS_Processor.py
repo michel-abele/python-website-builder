@@ -53,8 +53,6 @@ class JS_Processor:
 
     # minify content
     def _minify_content(self, content):
-        # Remove comments
         content = re.sub(r'\/\/.*|\/\*[\s\S]*?\*\/', '', content)
-        # Remove whitespace and line breaks
         content = re.sub(r'\s+', ' ', content)
         return content.strip()

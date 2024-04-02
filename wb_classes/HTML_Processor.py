@@ -52,6 +52,9 @@ class HTML_Processor:
                     # generate table of contents
                     content = self._generate_table_of_contents(content)
 
+                    # extract image links
+                    self._extract_image_links(content)
+
                     # minify html content
                     if "-mini" in sys.argv or "-m" in sys.argv:
                         content = self._minify_content(content)
@@ -198,6 +201,38 @@ class HTML_Processor:
                     toc = toc.replace('</a><li>', '</a></li><li>').replace('</a></ol>', '</a></li></ol>')
                     content = content.replace('<!-- toc -->', toc)
         return content
+    
+    # extract image links
+    def _extract_image_links(self, content):
+        image_links = []
+
+        # <img src="..."> elements
+        img_links = re.findall(r'<img[^>]+src="([^"]+)"', content)
+        img_links = [link.replace("/lib/img/", "") for link in img_links]
+        image_links.extend(img_links)
+
+        # <source srcset="..."> elements
+        source_links = re.findall(r'<source[^>]+srcset="([^"]+)"', content)
+        for link in source_links:
+            srcset_links = re.findall(r'([^\s,]+)', link)
+            srcset_links = [link.replace("/lib/img/", "") for link in srcset_links]
+            image_links.extend(srcset_links)
+
+        image_links = list(set(image_links))
+        image_links_file = "./temp/image_links.json"
+        os.makedirs(os.path.dirname(image_links_file), exist_ok=True)
+
+        try:
+            with open(image_links_file, 'r') as f:
+                existing_links = json.load(f)
+        except FileNotFoundError:
+            existing_links = []
+
+        existing_links.extend(image_links)
+        existing_links = list(set(existing_links))
+
+        with open(image_links_file, 'w') as f:
+            json.dump(existing_links, f)
 
     # minify html content
     def _minify_content(self, content):

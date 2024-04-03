@@ -44,7 +44,7 @@ class HTML_Processor:
 
                     # target file modification time
                     file_modification_time = os.path.getmtime(target_file_path)
-                    content = content.replace("<!-- value_dynamic: file_modification_time -->", str(file_modification_time))
+                    content = content.replace("<!-- var: FMT -->", str(file_modification_time))
 
                     # generate heading id attributes
                     content = self._generate_heading_ids(content)
@@ -129,18 +129,18 @@ class HTML_Processor:
 
     # include partials
     def _include_partials(self, content):
-        matches = re.findall(r"<!-- include: (.*?) -->", content)
+        matches = re.findall(r"<!-- inc: (.*?) -->", content)
         for match in matches:
             file_path = os.path.join(self.source_path, "parts", match.strip() + ".html")
             with open(file_path, 'r') as file:
                 replacement = file.read()
-                nested_matches = re.findall(r"<!-- include: (.*?) -->", replacement)
+                nested_matches = re.findall(r"<!-- inc: (.*?) -->", replacement)
                 for nested_match in nested_matches:
                     nested_file_path = os.path.join(self.source_path, "parts", nested_match.strip() + ".html")
                     with open(nested_file_path, 'r') as nested_file:
                         nested_replacement = nested_file.read()
-                    replacement = replacement.replace(f"<!-- include: {nested_match} -->", nested_replacement)
-                content = content.replace(f"<!-- include: {match} -->", replacement)
+                    replacement = replacement.replace(f"<!-- inc: {nested_match} -->", nested_replacement)
+                content = content.replace(f"<!-- inc: {match} -->", replacement)
         return content
 
     # replace static values
@@ -150,7 +150,7 @@ class HTML_Processor:
                 config = json.load(config_file)
                 if isinstance(config, dict) and config:
                     for key, value in config.items():
-                        content = content.replace(f"<!-- value_static: {key} -->", value)
+                        content = content.replace(f"<!-- var: {key} -->", value)
             except (json.JSONDecodeError, FileNotFoundError):
                 pass
         return content
@@ -173,7 +173,7 @@ class HTML_Processor:
 
     # generate table of contents
     def _generate_table_of_contents(self, content):
-        if '<!-- toc -->' in content:
+        if '<!-- var: TOC -->' in content:
             main_content = re.search(r'<main>(.*?)</main>', content, re.DOTALL)
             if main_content:
                 main_content = main_content.group(1)
@@ -199,7 +199,7 @@ class HTML_Processor:
                         current_level -= 1
                     toc += '</li></ol></div>'
                     toc = toc.replace('</a><li>', '</a></li><li>').replace('</a></ol>', '</a></li></ol>')
-                    content = content.replace('<!-- toc -->', toc)
+                    content = content.replace('<!-- var: TOC -->', toc)
         return content
     
     # extract image links

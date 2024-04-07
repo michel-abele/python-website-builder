@@ -1,0 +1,80 @@
+{
+    "init": {
+        "python_required_modules": [
+            "tqdm",
+            "libsass"
+        ],
+        "directories_to_delete": [
+            "./.git",
+            "./temp",
+            "./.vscode"
+        ],
+        "directories_to_create": [
+            "./page",
+            "./source",
+            "./source/fonts",
+            "./source/html",
+            "./source/html/content",
+            "./source/html/parts",
+            "./source/img",
+            "./source/js",
+            "./source/js/backend",
+            "./source/js/backend/content",
+            "./source/js/backend/parts",
+            "./source/js/frontend",
+            "./source/js/frontend/content",
+            "./source/js/frontend/parts",
+            "./source/misc",
+            "./source/sitemap",
+            "./source/scss",
+            "./source/scss/content",
+            "./source/scss/parts"
+        ],
+        "directories_to_copy_source": [
+            "./system/init/scss/framework/framework",
+            "./system/init/js/frontend/framework/framework"
+        ],
+        "directories_to_copy_target": [
+            "./source/scss/parts/framework",
+            "./source/js/frontend/parts/framework"
+        ],
+        "files_to_delete": [
+            "./.gitignore",
+            "./LICENSE",
+            "./README.md"
+        ],
+        "files_to_create": [
+            "./source/html/content/index.html",
+            "./source/js/backend/content/index.js",
+            "./source/js/frontend/custom.js",
+            "./source/misc/.htaccess",
+            "./source/misc/robots.txt",
+            "./source/scss/parts/main.scss"
+        ],
+        "files_to_copy_source": [
+            "./system/init/scss/framework/framework.scss",
+            "./system/init/js/frontend/framework/framework.js"
+        ],
+        "files_to_copy_target": [
+            "./source/scss/content/framework.scss",
+            "./source/js/frontend/content/framework.js"
+        ]
+    },
+    "build": {
+        "target_directory": "./page",
+        "temp_directory": "./temp",
+        "create_library_directories": [
+            "./page/lib",
+            "./page/lib/css",
+            "./page/lib/fonts",
+            "./page/lib/img",
+            "./page/lib/js"
+        ],
+        "library_directory": "./page/lib",
+        "library_directory_css": "./page/lib/css",
+        "library_directory_js": "./page/lib/js",
+        "source_directory_html": "./source/html/content",
+        "source_directory_js": "./source/js/frontend/content",
+        "source_directory_scss": "./source/scss/content"
+    }
+}

@@ -14,13 +14,23 @@ import os
 
 # import classes
 from system.classes.directory_comparator import Directory_Comparator as dc
+from system.classes.file_modification_time_updater import File_Modification_Time_Updater as fmtu
 from system.classes.file_system_manager import File_System_Manager as fsm
+
 
 
 # ==================================================================================================
 # build module
 def build(module_config_file, page_config_file, option_clear, option_minify):
-    
+
+
+    # ==============================================================================================
+    # variables
+    html_extension = 'html'
+    js_extension = 'js'
+    css_extension = 'css'
+    scss_extension = 'scss'
+
 
     # ==============================================================================================
     # load config files
@@ -43,6 +53,10 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     source_directory_html = module_config['build']['source_directory_html']
     source_directory_js = module_config['build']['source_directory_js']
     source_directory_scss = module_config['build']['source_directory_scss']
+    partials_directory_html = module_config['build']['partials_directory_html']
+    partials_directory_js = module_config['build']['partials_directory_js']
+    partials_directory_scss = module_config['build']['partials_directory_scss']
+    partials_modification_time_file = module_config['build']['partials_modification_time_file']
 
     # get data from page config file
     var456 = page_config['var456']
@@ -62,9 +76,9 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
 
         # synchronize target directories
         else:
-            dc.compare_directories(source_directory_html, target_directory, 'html', library_directory)
-            dc.compare_directories(source_directory_js, library_directory_js, 'js')
-            dc.compare_directories(source_directory_scss, library_directory_css, 'css')
+            dc.compare_directories(source_directory_html, target_directory, html_extension, html_extension, library_directory)
+            dc.compare_directories(source_directory_js, library_directory_js, js_extension, js_extension)
+            dc.compare_directories(source_directory_scss, library_directory_css, scss_extension, css_extension)
 
     # if target directory is empty
     else:
@@ -74,15 +88,20 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     fsm.create_directories(temp_directory)
 
 
+    # ==============================================================================================
+    # HTML processing
+    fmtu.update_file_modification_times(partials_directory_html, html_extension, temp_directory, partials_modification_time_file)
+
+
+    # ==============================================================================================
+    # S/CSS processing
+    fmtu.update_file_modification_times(partials_directory_scss, scss_extension, temp_directory, partials_modification_time_file)
 
 
 
-
-
-
-
-
-
+    # ==============================================================================================
+    # JavaScript processing
+    fmtu.update_file_modification_times(partials_directory_js, js_extension, temp_directory, partials_modification_time_file)
 
 
 

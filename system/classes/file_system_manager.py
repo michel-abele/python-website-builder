@@ -26,8 +26,8 @@ class File_System_Manager:
         # ==================================================================================================
         # progress bar settings
         self.progress_bar_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
-        self.progress_bar_ncols = 75
-        self.progress_bar_ascii = False
+        self.progress_bar_ncols  = 75
+        self.progress_bar_ascii  = False
         self.progress_bar_colour = 'blue'
 
 

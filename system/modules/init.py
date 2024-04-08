@@ -24,14 +24,14 @@ def init(module_config_file):
         config = json.load(file)
 
     # get data from config file
-    directories_to_delete = config['init']['directories_to_delete']
-    directories_to_create = config['init']['directories_to_create']
-    files_to_delete = config['init']['files_to_delete']
-    files_to_create = config['init']['files_to_create']
+    directories_to_delete      = config['init']['directories_to_delete']
+    directories_to_create      = config['init']['directories_to_create']
+    files_to_delete            = config['init']['files_to_delete']
+    files_to_create            = config['init']['files_to_create']
     directories_to_copy_source = config['init']['directories_to_copy_source']
     directories_to_copy_target = config['init']['directories_to_copy_target']
-    files_to_copy_source = config['init']['files_to_copy_source']
-    files_to_copy_target = config['init']['files_to_copy_target']
+    files_to_copy_source       = config['init']['files_to_copy_source']
+    files_to_copy_target       = config['init']['files_to_copy_target']
 
     # delete files
     fsm.delete_files(files_to_delete)

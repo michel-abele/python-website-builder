@@ -64,21 +64,37 @@
         "target_directory": "./page",
         "temp_directory": "./temp",
         "create_library_directories": [
-            "./page/lib",
-            "./page/lib/css",
-            "./page/lib/fonts",
-            "./page/lib/img",
-            "./page/lib/js"
+            "./page/library",
+            "./page/library/css",
+            "./page/library/fonts",
+            "./page/library/img",
+            "./page/library/js"
         ],
-        "library_directory": "./page/lib",
-        "library_directory_css": "./page/lib/css",
-        "library_directory_js": "./page/lib/js",
-        "source_directory_html": "./source/html/content",
-        "source_directory_js": "./source/js/frontend/content",
-        "source_directory_scss": "./source/scss/content",
-        "partials_directory_html": "./source/html/parts",
-        "partials_directory_js": "./source/js/frontend/parts",
-        "partials_directory_scss": "./source/scss/parts",
-        "partials_modification_time_file": "partials_modification_time.json"
+        "library": {
+            "directory_main": "./page/library",
+            "directory_css": "./page/library/css",
+            "directory_js": "./page/library/js"
+        },
+        "source": {
+            "directory_html": "./source/html/content",
+            "directory_js": "./source/js/frontend/content",
+            "directory_scss": "./source/scss/content"
+        },
+        "partials": {
+            "directory_html": "./source/html/parts",
+            "directory_js": "./source/js/frontend/parts",
+            "directory_scss": "./source/scss/parts",
+            "file_modification_time": "partials_modification_time.json"
+        },
+        "iso": {
+            "639_2": "./system/config/iso-639_2.json",
+            "639_3": "./system/config/iso-639_3.json",
+            "3166-1_2": "./system/config/iso-3166-1_2.json",
+            "3166-1_3": "./system/config/iso-3166-1_3.json"
+        }
+        
+        
+        
+        
     }
 }

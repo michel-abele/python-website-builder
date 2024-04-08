@@ -38,8 +38,8 @@ class Directory_Comparator:
 
         # progress bar settings
         progress_bar_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
-        progress_bar_ncols = 75
-        progress_bar_ascii = False
+        progress_bar_ncols  = 75
+        progress_bar_ascii  = False
         progress_bar_colour = 'blue'
 
         # method

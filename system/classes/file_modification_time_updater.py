@@ -30,8 +30,8 @@ class File_Modification_Time_Updater:
 
         # progress bar settings
         progress_bar_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
-        progress_bar_ncols = 75
-        progress_bar_ascii = False
+        progress_bar_ncols  = 75
+        progress_bar_ascii  = False
         progress_bar_colour = 'blue'
         
         # analyze the directory and find the latest modification time
@@ -39,7 +39,7 @@ class File_Modification_Time_Updater:
             for file in files:
                 if file.endswith(file_extension):
                     file_path = os.path.join(root, file)
-                    mod_time = os.path.getmtime(file_path)
+                    mod_time  = os.path.getmtime(file_path)
                     latest_mod_time = max(latest_mod_time, mod_time)
 
         # update the modification time of all files to the latest time

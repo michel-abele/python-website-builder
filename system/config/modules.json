@@ -91,8 +91,16 @@
             "639_3": "./system/config/iso-639_3.json",
             "3166-1_2": "./system/config/iso-3166-1_2.json",
             "3166-1_3": "./system/config/iso-3166-1_3.json"
+        },
+        "temp_files": {
+            "images": "./temp/images.json"
+        },
+        "web_paths": {
+            "css": "/library/css/",
+            "fonts": "/library/fonts/",
+            "img": "/library/img/",
+            "js": "/library/js/"
         }
-        
         
         
         

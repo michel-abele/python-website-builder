@@ -18,6 +18,7 @@ from system.classes.file_modification_time_updater import File_Modification_Time
 from system.classes.file_system_manager            import File_System_Manager            as fsm
 from system.classes.html_processor                 import HTML_Processor                 as html
 from system.classes.multilingual_webseite_checker  import Multilingual_Webseite_Checker  as mlwc
+from system.classes.sitemap_generator              import Sitemap_Generator              as sg
 
 
 # ==================================================================================================
@@ -53,6 +54,7 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     library_directory               = module_config['build']['library']['directory_main']
     library_directory_css           = module_config['build']['library']['directory_css']
     library_directory_js            = module_config['build']['library']['directory_js']
+    library_directory_sitemaps      = module_config['build']['library']['directory_sitemaps']
 
     source_directory_html           = module_config['build']['source']['directory_html']
     source_directory_js             = module_config['build']['source']['directory_js']
@@ -68,12 +70,14 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     iso_3166_1_2_path               = module_config['build']['iso']['3166-1_2']
     iso_3166_1_3_path               = module_config['build']['iso']['3166-1_3']
 
+    temp_directory_sitemaps         = module_config['build']['temp_directories']['sitemaps']
+
     temp_file_images                = module_config['build']['temp_files']['images']
 
     web_path_img                    = module_config['build']['web_paths']['img']
 
     # get data from page config file
-    var456 = page_config['var456']
+    page_domain = page_config['domain']
 
 
     # ==============================================================================================
@@ -107,13 +111,15 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     is_multilingual_website = mlwc.is_multilingual(source_directory_html, partials_directory_html, iso_639_2_path, iso_639_3_path, iso_3166_1_2_path, iso_3166_1_3_path)
 
     fmtu.update_file_modification_times(partials_directory_html, html_extension, temp_directory, partials_file_modification_time)
-    html.process(source_directory_html, target_directory, partials_directory_html, partials_file_modification_time, is_multilingual_website, page_config, temp_file_images, web_path_img, option_minify)
+    html.process(source_directory_html, target_directory, partials_directory_html, partials_file_modification_time, is_multilingual_website, page_config, temp_file_images, web_path_img, option_minify, temp_directory_sitemaps)
+    sg.generate(temp_directory_sitemaps, library_directory_sitemaps, target_directory, page_domain)
 
 
     # ==============================================================================================
     # S/CSS processing
     fmtu.update_file_modification_times(partials_directory_scss, scss_extension, temp_directory, partials_file_modification_time)
 
+        
 
     # ==============================================================================================
     # JavaScript processing

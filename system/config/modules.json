@@ -68,12 +68,14 @@
             "./page/library/css",
             "./page/library/fonts",
             "./page/library/img",
-            "./page/library/js"
+            "./page/library/js",
+            "./page/library/sitemaps"
         ],
         "library": {
             "directory_main": "./page/library",
             "directory_css": "./page/library/css",
-            "directory_js": "./page/library/js"
+            "directory_js": "./page/library/js",
+            "directory_sitemap": "./page/library/sitemaps"
         },
         "source": {
             "directory_html": "./source/html/content",
@@ -92,6 +94,9 @@
             "3166-1_2": "./system/config/iso-3166-1_2.json",
             "3166-1_3": "./system/config/iso-3166-1_3.json"
         },
+        "temp_directories": [
+            "./temp/sitemaps"
+        ],
         "temp_files": {
             "images": "./temp/images.json"
         },

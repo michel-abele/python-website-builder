@@ -13,8 +13,9 @@ import os
 import json
 import re
 
-# import third-party modules
 from datetime import datetime
+
+# import third-party modules
 from tqdm import tqdm as progress_bar
 
 
@@ -28,7 +29,7 @@ class HTML_Processor:
 
     # process
     @staticmethod
-    def process(source_directory_html, target_directory, partials_directory_html, partials_file_modification_time, is_multilingual_website, page_config, temp_file_images, web_path_img, option_minify):
+    def process(source_directory_html, target_directory, partials_directory_html, partials_file_modification_time, is_multilingual_website, page_config, temp_file_images, web_path_img, option_minify, temp_directory_sitemaps):
 
         # progress bar settings
         progress_bar_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
@@ -97,6 +98,9 @@ class HTML_Processor:
 
                     # set the modification time of the target file to the modification time of the source file
                     os.utime(target_file, (os.path.getmtime(source_file), os.path.getmtime(source_file)))
+
+                    # save file data for sitemap
+                    HTML_Processor._save_sitemap_data(source_file, target_file, is_multilingual_website, source_directory_html, target_directory, temp_directory_sitemaps)
 
 
     # ==============================================================================================
@@ -271,3 +275,32 @@ class HTML_Processor:
         content = re.sub(r'<(?:img|source) srcset="(.+?)">', process_srcset_attributes, content)
 
         return content
+    
+    # save file data for sitemap
+    @staticmethod
+    def _save_sitemap_data(source_file, target_file, is_multilingual_website, source_directory_html, target_directory, temp_directory_sitemaps):
+        os.makedirs(temp_directory_sitemaps, exist_ok=True)
+
+        if is_multilingual_website:
+            language_code = os.path.relpath(os.path.dirname(source_file), source_directory_html).split(os.path.sep)[0]
+            json_filename = f"{language_code}.json"
+
+            if language_code == ".":
+                json_filename = "global.json"
+        else:
+            json_filename = "global.json"
+
+        json_file = os.path.join(temp_directory_sitemaps, json_filename)
+        relative_file_path = os.path.relpath(target_file, target_directory)
+        modification_time = int(os.path.getmtime(target_file))
+
+        if os.path.exists(json_file):
+            with open(json_file, "r") as f:
+                data = json.load(f)
+        else:
+            data = {}
+
+        data[relative_file_path] = modification_time
+
+        with open(json_file, "w") as f:
+            json.dump(data, f, indent=4)

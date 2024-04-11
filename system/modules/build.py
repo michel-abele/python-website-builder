@@ -17,7 +17,9 @@ from system.classes.directory_comparator           import Directory_Comparator  
 from system.classes.file_modification_time_updater import File_Modification_Time_Updater as fmtu
 from system.classes.file_system_manager            import File_System_Manager            as fsm
 from system.classes.html_processor                 import HTML_Processor                 as html
+from system.classes.js_processor                   import JavaScript_Processor           as js
 from system.classes.multilingual_webseite_checker  import Multilingual_Webseite_Checker  as mlwc
+from system.classes.scss_processor                 import SCSS_Processor                 as scss
 from system.classes.sitemap_generator              import Sitemap_Generator              as sg
 
 
@@ -53,6 +55,8 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
 
     library_directory               = module_config['build']['library']['directory_main']
     library_directory_css           = module_config['build']['library']['directory_css']
+    library_directory_fonts         = module_config['build']['library']['directory_fonts']
+    library_directory_img           = module_config['build']['library']['directory_img']
     library_directory_js            = module_config['build']['library']['directory_js']
     library_directory_sitemaps      = module_config['build']['library']['directory_sitemaps']
 
@@ -73,6 +77,7 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     temp_directory_sitemaps         = module_config['build']['temp_directories']['sitemaps']
 
     temp_file_images                = module_config['build']['temp_files']['images']
+    temp_file_fonts                 = module_config['build']['temp_files']['fonts']
 
     web_path_img                    = module_config['build']['web_paths']['img']
 
@@ -118,12 +123,13 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     # ==============================================================================================
     # S/CSS processing
     fmtu.update_file_modification_times(partials_directory_scss, scss_extension, temp_directory, partials_file_modification_time)
+    scss.process(source_directory_scss, library_directory_css, library_directory_img, partials_directory_scss, partials_file_modification_time, temp_file_images, temp_file_fonts, library_directory_fonts, option_minify)
 
-        
 
     # ==============================================================================================
     # JavaScript processing
     fmtu.update_file_modification_times(partials_directory_js, js_extension, temp_directory, partials_file_modification_time)
+    js.process(source_directory_js, library_directory_js, partials_directory_js, partials_file_modification_time, option_minify)
 
 
     # ==============================================================================================

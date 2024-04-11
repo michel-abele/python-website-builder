@@ -195,18 +195,12 @@ class HTML_Processor:
     # minify HTML code
     @staticmethod
     def _minify_html(content):
-        # remove comments
         content = re.sub(r"<!--.*?-->", "", content, flags=re.DOTALL)
-        # remove leading whitespace
         content = re.sub(r"^\s+", "", content, flags=re.MULTILINE)
-        # remove trailing whitespace
         content = re.sub(r"\s+$", "", content, flags=re.MULTILINE)
-        # remove whitespace between tags
         content = re.sub(r">\s+<", "><", content)
-        # remove whitespace between tags and text
         content = re.sub(r">\s+([^\s<])", r">\1", content)
         content = re.sub(r"([^\s>])\s+<", r"\1<", content)
-        # remove empty lines
         content = re.sub(r"\n\s*\n", "\n", content)
         return content
 
@@ -214,66 +208,58 @@ class HTML_Processor:
     @staticmethod
     def _process_image_references(content, temp_file_images, web_path_img):
 
-        # check if the JSON file exists, if not create it
         if not os.path.exists(temp_file_images):
             with open(temp_file_images, "w") as f:
                 json.dump([], f)
-
+        
         # process src attributes
         def process_src_attributes(match):
             img_path = match.group(1)
             img_width = match.group(2)
-
             if not any(img_path.lower().endswith(ext) for ext in (".jpg", ".jpeg", ".png", ".webp")):
                 return match.group(0)
-
             img_name, img_ext = os.path.splitext(img_path)
-            new_src = f'{web_path_img}/{img_name}_{img_width}{img_ext}'
-            data_fisrc = f'{web_path_img}/{img_path}'
-
+            if img_width:
+                new_src = f'{web_path_img}/{img_name}_{img_width}{img_ext}'
+                data_fisrc = f'{web_path_img}/{img_path}'
+                img_tag = f'<img src="{new_src}" data-fisrc="{data_fisrc}">'
+            else:
+                new_src = f'{web_path_img}/{img_path}'
+                img_tag = f'<img src="{new_src}">'
             with open(temp_file_images, "r") as f:
                 image_paths = json.load(f)
-
             if img_path not in image_paths:
                 image_paths.append(img_path)
-
                 with open(temp_file_images, "w") as f:
                     json.dump(image_paths, f)
-
-            return f'<img src="{new_src}" data-fisrc="{data_fisrc}">'
-
+            return img_tag
+        
         # process srcset attributes
         def process_srcset_attributes(match):
             srcset = match.group(1)
-            img_paths = re.findall(r'(.+?)\s+(\d+w)', srcset)
-
+            img_paths = re.findall(r'(.+?)(?:\s+(\d+w))?', srcset)
             new_srcset = []
             for img_path, img_width in img_paths:
                 if not any(img_path.lower().endswith(ext) for ext in (".jpg", ".jpeg", ".png", ".webp")):
-                    new_srcset.append(f'{img_path} {img_width}')
+                    new_srcset.append(f'{img_path}' if not img_width else f'{img_path} {img_width}')
                     continue
-
                 img_name, img_ext = os.path.splitext(img_path)
-                new_src = f'{web_path_img}/{img_name}_{img_width}{img_ext}'
-                new_srcset.append(f'{new_src} {img_width}')
-
+                if img_width:
+                    new_src = f'{web_path_img}/{img_name}_{img_width}{img_ext}'
+                    new_srcset.append(f'{new_src} {img_width}')
+                else:
+                    new_src = f'{web_path_img}/{img_path}'
+                    new_srcset.append(new_src)
                 with open(temp_file_images, "r") as f:
                     image_paths = json.load(f)
-
                 if img_path not in image_paths:
                     image_paths.append(img_path)
-
                     with open(temp_file_images, "w") as f:
                         json.dump(image_paths, f)
-
             return f'<img srcset="{", ".join(new_srcset)}">'
 
-        # process image references in src attributes
-        content = re.sub(r'<img src="(.+?)\s+(\d+w)">', process_src_attributes, content)
-
-        # process image references in srcset attributes
+        content = re.sub(r'<img src="(.+?)(?:\s+(\d+w))?>', process_src_attributes, content)
         content = re.sub(r'<(?:img|source) srcset="(.+?)">', process_srcset_attributes, content)
-
         return content
     
     # save file data for sitemap

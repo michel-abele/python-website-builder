@@ -2,7 +2,8 @@
     "init": {
         "python_required_modules": [
             "tqdm",
-            "libsass"
+            "libsass",
+            "slimit"
         ],
         "directories_to_delete": [
             "./.git",
@@ -74,6 +75,8 @@
         "library": {
             "directory_main": "./page/library",
             "directory_css": "./page/library/css",
+            "directory_fonts": "./page/library/fonts",
+            "directory_img": "./page/library/img",
             "directory_js": "./page/library/js",
             "directory_sitemap": "./page/library/sitemaps"
         },
@@ -98,7 +101,8 @@
             "./temp/sitemaps"
         ],
         "temp_files": {
-            "images": "./temp/images.json"
+            "images": "./temp/images.json",
+            "fonts": "./temp/fonts.json"
         },
         "web_paths": {
             "css": "/library/css/",

@@ -136,4 +136,4 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     # finalization
 
     # delete temp directory
-    fsm.delete_directories(temp_directory)
+    #fsm.delete_directories(temp_directory)

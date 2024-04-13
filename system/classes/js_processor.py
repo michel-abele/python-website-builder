@@ -15,7 +15,7 @@ import re
 
 # import third-party modules
 from tqdm import tqdm as progress_bar
-from slimit import minify
+from jsmin import jsmin
 
 
 # ==================================================================================================
@@ -62,16 +62,17 @@ class JavaScript_Processor:
                    
                     # process import statements
                     content = JavaScript_Processor._process_imports(content, partials_directory_js)
+
                     # minify JavaScript if option is set
                     if option_minify:
-                        js_content = JavaScript_Processor._minify_js(js_content)
+                        content = JavaScript_Processor._minify_js(content)
                    
                     # create target directory if it doesn't exist
                     os.makedirs(os.path.dirname(target_file), exist_ok=True)
                    
                     # write JavaScript content to target file
                     with open(target_file, "w", encoding="utf-8") as f:
-                        f.write(js_content)
+                        f.write(content)
                    
                     # set modification time of target file to match source file
                     os.utime(target_file, (os.path.getatime(source_file), os.path.getmtime(source_file)))
@@ -96,4 +97,4 @@ class JavaScript_Processor:
     # minify JavaScript
     @staticmethod
     def _minify_js(js_content):
-        return minify(js_content, mangle=True, mangle_toplevel=True)
+        return jsmin(js_content, mangle=True, mangle_toplevel=True)

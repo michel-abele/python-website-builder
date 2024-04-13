@@ -67,7 +67,6 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
     partials_directory_html         = module_config['build']['partials']['directory_html']
     partials_directory_js           = module_config['build']['partials']['directory_js']
     partials_directory_scss         = module_config['build']['partials']['directory_scss']
-    partials_file_modification_time = module_config['build']['partials']['file_modification_time']
     
     iso_639_2_path                  = module_config['build']['iso']['639_2']
     iso_639_3_path                  = module_config['build']['iso']['639_3']
@@ -78,6 +77,7 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
 
     temp_file_images                = module_config['build']['temp_files']['images']
     temp_file_fonts                 = module_config['build']['temp_files']['fonts']
+    partials_file_modification_time = module_config['build']['temp_files']['file_modification_time']
 
     web_path_img                    = module_config['build']['web_paths']['img']
 
@@ -113,22 +113,22 @@ def build(module_config_file, page_config_file, option_clear, option_minify):
 
     # ==============================================================================================
     # HTML processing
-    is_multilingual_website = mlwc.is_multilingual(source_directory_html, partials_directory_html, iso_639_2_path, iso_639_3_path, iso_3166_1_2_path, iso_3166_1_3_path)
+    is_multilingual_website = mlwc.is_multilingual(source_directory_html, iso_639_2_path, iso_639_3_path, iso_3166_1_2_path, iso_3166_1_3_path)
 
-    fmtu.update_file_modification_times(partials_directory_html, html_extension, temp_directory, partials_file_modification_time)
-    html.process(source_directory_html, target_directory, partials_directory_html, partials_file_modification_time, is_multilingual_website, page_config, temp_file_images, web_path_img, option_minify, temp_directory_sitemaps)
+    fmtu.update_file_modification_times(partials_directory_html, html_extension, partials_file_modification_time)
+    html.process(source_directory_html, target_directory, partials_directory_html, partials_file_modification_time, is_multilingual_website, page_config_file, temp_file_images, web_path_img, option_minify, temp_directory_sitemaps)
     sg.generate(temp_directory_sitemaps, library_directory_sitemaps, target_directory, page_domain)
 
 
     # ==============================================================================================
     # S/CSS processing
-    fmtu.update_file_modification_times(partials_directory_scss, scss_extension, temp_directory, partials_file_modification_time)
+    fmtu.update_file_modification_times(partials_directory_scss, scss_extension, partials_file_modification_time)
     scss.process(source_directory_scss, library_directory_css, library_directory_img, partials_directory_scss, partials_file_modification_time, temp_file_images, temp_file_fonts, library_directory_fonts, option_minify)
 
 
     # ==============================================================================================
     # JavaScript processing
-    fmtu.update_file_modification_times(partials_directory_js, js_extension, temp_directory, partials_file_modification_time)
+    fmtu.update_file_modification_times(partials_directory_js, js_extension, partials_file_modification_time)
     js.process(source_directory_js, library_directory_js, partials_directory_js, partials_file_modification_time, option_minify)
 
 

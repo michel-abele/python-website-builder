@@ -14,7 +14,7 @@ import json
 import math
 
 # import third-party modules
-from tqdm import tqdm
+from tqdm import tqdm as progress_bar
 
 
 # ==================================================================================================
@@ -29,11 +29,17 @@ class Sitemap_Generator:
     @staticmethod
     def generate(temp_directory_sitemaps, library_directory_sitemaps, target_directory, base_url):
 
+        # progress bar settings
+        progress_bar_format = "{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
+        progress_bar_ncols  = 75
+        progress_bar_ascii  = False
+        progress_bar_colour = 'blue'
+
         # create the library directory if it does not exist
         os.makedirs(library_directory_sitemaps, exist_ok=True)
 
         # loop through all JSON files in the temp directory
-        for json_file in tqdm(os.listdir(temp_directory_sitemaps), desc="Generating sitemaps", unit="file"):
+        for json_file in progress_bar(os.listdir(temp_directory_sitemaps), desc="Generating sitemaps", unit="file", ascii=progress_bar_ascii, ncols=progress_bar_ncols, colour=progress_bar_colour, bar_format=progress_bar_format):
             if json_file.endswith(".json"):
                 json_file_path = os.path.join(temp_directory_sitemaps, json_file)
 

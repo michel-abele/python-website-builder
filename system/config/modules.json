@@ -3,7 +3,7 @@
         "python_required_modules": [
             "tqdm",
             "libsass",
-            "slimit"
+            "jsmin"
         ],
         "directories_to_delete": [
             "./.git",
@@ -47,7 +47,7 @@
         "files_to_create": [
             "./source/html/content/index.html",
             "./source/js/backend/content/index.js",
-            "./source/js/frontend/custom.js",
+            "./source/js/frontend/content/custom.js",
             "./source/misc/.htaccess",
             "./source/misc/robots.txt",
             "./source/scss/parts/main.scss"
@@ -78,7 +78,7 @@
             "directory_fonts": "./page/library/fonts",
             "directory_img": "./page/library/img",
             "directory_js": "./page/library/js",
-            "directory_sitemap": "./page/library/sitemaps"
+            "directory_sitemaps": "./page/library/sitemaps"
         },
         "source": {
             "directory_html": "./source/html/content",
@@ -88,8 +88,7 @@
         "partials": {
             "directory_html": "./source/html/parts",
             "directory_js": "./source/js/frontend/parts",
-            "directory_scss": "./source/scss/parts",
-            "file_modification_time": "partials_modification_time.json"
+            "directory_scss": "./source/scss/parts"
         },
         "iso": {
             "639_2": "./system/config/iso-639_2.json",
@@ -97,12 +96,13 @@
             "3166-1_2": "./system/config/iso-3166-1_2.json",
             "3166-1_3": "./system/config/iso-3166-1_3.json"
         },
-        "temp_directories": [
-            "./temp/sitemaps"
-        ],
+        "temp_directories": {
+            "sitemaps": "./temp/sitemaps"
+        },
         "temp_files": {
             "images": "./temp/images.json",
-            "fonts": "./temp/fonts.json"
+            "fonts": "./temp/fonts.json",
+            "file_modification_time": "./temp/partials_modification_time.json"
         },
         "web_paths": {
             "css": "/library/css/",

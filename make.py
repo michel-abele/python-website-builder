@@ -21,10 +21,10 @@
 import argparse
 
 # import custom modules
-from system.modules.build import Build as build_module
-from system.modules.ftp import Ftp as ftp_module
-from system.modules.init import Init as init_module
-from system.modules.server import Server as server_module
+from system.modules.build import build as build_module
+from system.modules.ftp import ftp as ftp_module
+from system.modules.init import init as init_module
+from system.modules.server import server as server_module
 
 # import functions
 from system.functions.python_package_manager import python_package_manager as ppm
@@ -33,7 +33,7 @@ from system.functions.python_package_manager import python_package_manager as pp
 # ==================================================================================================
 # variables
 module_config_file = './system/config/modules.json'
-page_config_file = './system/config/pages.json'
+page_config_file = './system/config/page.json'
 
 # ==================================================================================================
 # main program
@@ -45,19 +45,20 @@ def main():
     # arguments and options
 
     # module arguments
-    parser.add_argument('module_long', choices=['build', 'ftp', 'init', 'server'], help='long argument for module')
-    parser.add_argument('module_short', choices=['b', 'f', 'i', 's'], help='short argument for module')
+    parser.add_argument('-B', "--build", action='store_true', help='builds the website')
+    parser.add_argument('-F', "--ftp", action='store_true', help='uploads the website to a webserver')
+    parser.add_argument('-I', "--init", action='store_true', help='initializes the workbench')
+    parser.add_argument('-S', "--server", action='store_true', help='managed a server')
 
     # globale options
     parser.add_argument('-c', '--clear', action='store_true', help='first deletes the contents of the target directory')
     parser.add_argument('-m', '--minify', action='store_true', help='minimizes the output code')
 
-
     # server options
     parser.add_argument('-s', '--start', action='store_true', help='starts a service')
-    parser.add_argument('-S', '--stop', action='store_true', help='stops a service')
+    parser.add_argument('-o', '--stop', action='store_true', help='stops a service')
     parser.add_argument('-r', '--restart', action='store_true', help='restarts a service')
-    parser.add_argument('-i', '--init', action='store_true', help='initializes a service')
+    parser.add_argument('-i', '--install', action='store_true', help='installed a service')
     parser.add_argument('-d', '--delete', action='store_true', help='deletes a service')
 
 
@@ -71,20 +72,20 @@ def main():
         # modules
 
         # load build module
-        if args.module_long == 'build' or args.module_short == 'b':
+        if args.build:
             build_module(module_config_file, page_config_file, args.clear, args.minify)
 
         # load ftp module
-        if args.module_long == 'ftp' or args.module_short == 'f':
+        if args.ftp:
             ftp_module(module_config_file, args.clear, args.minify)
 
         # load init module
-        if args.module_long == 'init' or args.module_short == 'i':
+        if args.init:
             ppm(module_config_file)
             init_module(module_config_file)
 
         # load server module
-        if args.module_long == 'server' or args.module_short == 's':
+        if args.server:
             server_module(module_config_file, args.start, args.stop, args.restart, args.init, args.delete)
 
 

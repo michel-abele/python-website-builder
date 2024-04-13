@@ -59,23 +59,28 @@ class SCSS_Processor:
                     # open the SCSS file to read the content
                     with open(source_file, "r", encoding="utf-8") as f:
                         content = f.read()
-                    
-                    # process @import statements
-                    content = SCSS_Processor._process_imports(content, partials_directory_scss)
 
-                    # process image references in CSS
-                    content = SCSS_Processor._process_image_references_css(content, temp_file_images, library_directory_img)
+                    if content:
 
-                    # process font references in CSS
-                    content = SCSS_Processor._process_font_references_css(content, temp_file_fonts, library_directory_fonts)
+                        # process @import statements
+                        content = SCSS_Processor._process_imports(content, partials_directory_scss)
 
-                    # compile SCSS to CSS
-                    css_content = sass.compile(string=content)
+                        # process image references in CSS
+                        content = SCSS_Processor._process_image_references_css(content, temp_file_images, library_directory_img)
 
-                    # minify CSS if option is set
-                    if option_minify:
-                        css_content = SCSS_Processor._minify_css(css_content)
-                    
+                        # process font references in CSS
+                        content = SCSS_Processor._process_font_references_css(content, temp_file_fonts, library_directory_fonts)
+
+                        # compile SCSS to CSS
+                        css_content = sass.compile(string=content)
+
+                        # minify CSS if option is set
+                        if option_minify:
+                            css_content = SCSS_Processor._minify_css(css_content)
+
+                    else:
+                        css_content = content
+
                     # create target directory if it doesn't exist
                     os.makedirs(os.path.dirname(target_file), exist_ok=True)
                     

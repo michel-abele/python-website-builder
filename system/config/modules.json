@@ -49,8 +49,7 @@
             "./source/js/backend/content/index.js",
             "./source/js/frontend/content/custom.js",
             "./source/misc/.htaccess",
-            "./source/misc/robots.txt",
-            "./source/scss/parts/main.scss"
+            "./source/misc/robots.txt"
         ],
         "files_to_copy_source": [
             "./system/init/scss/framework/framework.scss",

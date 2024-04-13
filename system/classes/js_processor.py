@@ -87,7 +87,7 @@ class JavaScript_Processor:
         import_statements = re.findall(r'// import (.*)', content)
        
         for statement in import_statements:
-            partial_file = os.path.join(partials_directory_js, statement)
+            partial_file = os.path.join(partials_directory_js, statement, ".js")
             with open(partial_file, "r", encoding="utf-8") as f:
                 partial_content = f.read()
             content = content.replace(f'// import {statement}', partial_content)

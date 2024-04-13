@@ -126,13 +126,13 @@ class HTML_Processor:
             with open(page_config, "r") as f:
                 config = json.load(f)
             language = config["language"]
-        return re.sub(r"<!--\s*(?:var|variable):\s*LANG\s*-->", language, content)
+        return re.sub(r"@\s*LANG\s*@", language, content)
 
     # replace file modification time variable with the modification time of the source file
     @staticmethod
     def _replace_file_modification_time_variable(content, modification_time):
         formatted_time = datetime.fromtimestamp(modification_time).strftime("%Y-%m-%d %H:%M")
-        return re.sub(r"<!--\s*(?:var|variable):\s*FMT\s*-->", formatted_time, content)
+        return re.sub(r"@\s*FMT\s*@", formatted_time, content)
 
     # replace custom variables with the values from the page config file
     @staticmethod
@@ -144,7 +144,7 @@ class HTML_Processor:
             variable_name = match.group(1)
             return config.get(variable_name, "")
 
-        return re.sub(r"<!--\s*(?:var|variable):\s*(.+?)\s*-->", replace, content)
+        return re.sub(r"@\s*(.+?)\s*@", replace, content)
 
     # add missing id attributes to headings
     @staticmethod
@@ -185,12 +185,12 @@ class HTML_Processor:
             toc += "</ol>"
             current_level -= 1
 
-        return re.sub(r"<!--\s*(?:var|variable):\s*TOC\s*-->", toc, content)
+        return re.sub(r"<!--\s*TOC\s*-->", toc, content)
 
     # remove remaining variables
     @staticmethod
     def _remove_remaining_variables(content):
-        return re.sub(r"<!--\s*(?:var|variable):\s*.+?\s*-->", "", content)
+        return re.sub(r"@\s*.+?\s*@", "", content)
 
     # minify HTML code
     @staticmethod

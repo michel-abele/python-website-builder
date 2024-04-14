@@ -103,15 +103,16 @@ class SCSS_Processor:
         for line in lines:
             if line.startswith("@import") and "url(" not in line:
                 import_statements.append(line)
-        
+    
         for statement in import_statements:
-            file_name = statement.split("'")[1] if "'" in statement else statement.split('"')[1]
-            partial_file = os.path.join(partials_directory_scss, "_" + file_name + ".scss")
+            file_path = statement.split("'")[1] if "'" in statement else statement.split('"')[1]
+            file_dir, file_name = os.path.split(file_path)
+            partial_file = os.path.join(partials_directory_scss, file_dir, "_" + file_name + ".scss")
             with open(partial_file, "r", encoding="utf-8") as f:
                 partial_content = f.read()
             partial_content = SCSS_Processor._process_imports(partial_content, partials_directory_scss)
             content = content.replace(statement, partial_content)
-        
+    
         return content
     
     # minify CSS
@@ -140,22 +141,32 @@ class SCSS_Processor:
         return content
 
     # process font references in CSS
-    def _process_imports(content, partials_directory_scss):
-        import_statements = []
-        lines = content.split("\n")
-        for line in lines:
-            if line.startswith("@import") and "url(" in line:
-                import_statements.append(line)
+    @staticmethod
+    def _process_font_references_css(content, temp_file_fonts, library_directory_fonts):
+        def process_url_references(match):
+            font_name = match.group(1)
+            font_values = match.group(2)
+            font_file = f"{font_name}.css"
+            relative_path = os.path.join("css", font_file)
+            new_url = f'url("{relative_path}")'
+            
+            if os.path.exists(temp_file_fonts):
+                with open(temp_file_fonts, "r") as f:
+                    font_data = json.load(f)
+            else:
+                font_data = {}
+            
+            if font_name in font_data:
+                existing_values = font_data[font_name]
+                new_values = [v.strip() for v in font_values.split(",") if v.strip() not in existing_values]
+                font_data[font_name].extend(new_values)
+            else:
+                font_data[font_name] = [v.strip() for v in font_values.split(",")]
+            
+            with open(temp_file_fonts, "w") as f:
+                json.dump(font_data, f)
+            
+            return new_url
         
-        for statement in import_statements:
-            url_match = re.search(r'url\((["\'])(.+?)\1\)', statement)
-            if url_match:
-                file_name = url_match.group(2)
-                partial_file = os.path.join(partials_directory_scss, "_" + file_name + ".scss")
-                if os.path.exists(partial_file):
-                    with open(partial_file, "r", encoding="utf-8") as f:
-                        partial_content = f.read()
-                    partial_content = SCSS_Processor._process_imports(partial_content, partials_directory_scss)
-                    content = content.replace(statement, partial_content)
-        
+        content = re.sub(r'@import\s+url\("?(.+?)\s+(.+?)"?\)', process_url_references, content)
         return content
